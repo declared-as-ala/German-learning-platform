@@ -1,0 +1,169 @@
+<!-- src/app/features/admin/word-hint/admin-word-hint.component.html -->
+<div class="space-y-6 p-4">
+  <!-- Header -->
+  <div class="flex justify-between items-center">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="applyFilters()"
+      placeholder="Search word hints..."
+      class="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+    />
+
+    <button (click)="openModal()" class="btn-primary flex items-center gap-1">
+      ➕ Add Word Hint
+    </button>
+  </div>
+
+  <!-- Table -->
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white rounded-lg overflow-hidden shadow">
+      <thead class="bg-primary-600 text-white">
+        <tr>
+          <th class="th">#</th>
+          <th class="th">Sentence</th>
+          <th class="th">Scrambled</th>
+          <th class="th">Translation</th>
+          <th class="th">Answer</th>
+          <th class="th">Level</th>
+          <th class="th">Score</th>
+          <th class="th text-center">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let item of paginated(); let i = index" class="border-b">
+          <td class="td">{{ (currentPage() - 1) * pageSize + i + 1 }}</td>
+          <td class="td">{{ item.sentence }}</td>
+          <td class="td">{{ item.scrambledSentence }}</td>
+          <td class="td">{{ item.translation }}</td>
+          <td class="td">{{ item.correctAnswer }}</td>
+          <td class="td">
+            <span
+              [ngClass]="{
+                'bg-green-100 text-green-800': item.difficulty === 'Easy',
+                'bg-yellow-100 text-yellow-800': item.difficulty === 'Medium',
+                'bg-red-100 text-red-800': item.difficulty === 'Hard'
+              }"
+              class="px-2 py-1 text-xs rounded-full capitalize"
+              >{{ item.difficulty }}</span
+            >
+          </td>
+          <td class="td">{{ item.scoreValue }}</td>
+          <td class="td text-center">
+            <div class="flex justify-center gap-2">
+              <button class="icon-btn" (click)="openModal(item)">✏️</button>
+              <button
+                class="icon-btn bg-red-600 hover:bg-red-700"
+                (click)="delete(item.mongoId!)"
+              >
+                🗑️
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="flex justify-center items-center gap-4 mt-4">
+    <button class="icon-btn" [disabled]="currentPage() === 1" (click)="prev()">
+      ←
+    </button>
+    <span class="font-medium">
+      Page {{ currentPage() }} / {{ totalPages() }}
+    </span>
+    <button
+      class="icon-btn"
+      [disabled]="currentPage() === totalPages()"
+      (click)="next()"
+    >
+      →
+    </button>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  *ngIf="showModal()"
+  class="fixed inset-0 bg-black/40 flex items-start justify-center z-50"
+>
+  <div
+    class="bg-white w-full max-w-xl mt-20 rounded-lg shadow-lg p-6 animate-slide-up relative"
+  >
+    <button
+      class="absolute top-2 right-3 text-gray-500 hover:text-gray-700"
+      (click)="closeModal()"
+    >
+      ✕
+    </button>
+
+    <h3 class="text-xl font-semibold mb-4">
+      {{ editing() ? "Edit" : "Add" }} Word Hint
+    </h3>
+
+    <form [formGroup]="form" (ngSubmit)="save()" class="space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input
+          class="input"
+          placeholder="Sentence"
+          formControlName="sentence"
+        />
+        <input
+          class="input"
+          placeholder="Scrambled"
+          formControlName="scrambledSentence"
+        />
+        <input
+          class="input"
+          placeholder="Translation"
+          formControlName="translation"
+        />
+        <input
+          class="input"
+          placeholder="Question Text"
+          formControlName="questionText"
+        />
+        <input
+          class="input"
+          placeholder="Correct Answer"
+          formControlName="correctAnswer"
+        />
+        <input
+          class="input"
+          placeholder="Wrong answers (comma …)"
+          formControlName="wrongAnswers"
+        />
+        <select class="input" formControlName="difficulty">
+          <option value="Easy">Easy</option>
+          <option value="Medium">Medium</option>
+          <option value="Hard">Hard</option>
+        </select>
+        <input
+          type="number"
+          class="input"
+          placeholder="Score"
+          formControlName="scoreValue"
+        />
+      </div>
+
+      <div class="flex gap-2 pt-2">
+        <button class="btn-primary" type="submit" [disabled]="form.invalid">
+          {{ editing() ? "Update" : "Create" }}
+        </button>
+        <button class="btn-secondary" type="button" (click)="closeModal()">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Toast -->
+<div
+  *ngIf="toast()"
+  class="fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded shadow animate-fade-in z-50"
+>
+  {{ toast() }}
+</div>

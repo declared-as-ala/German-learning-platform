@@ -27,7 +27,7 @@ Chart.register(...registerables);
 
       <!-- Stats Overview -->
       <div
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 mb-8"
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6 mb-8"
       >
         <div
           class="relative overflow-hidden rounded-xl shadow-lg transform hover:scale-105 transition-transform bg-gradient-to-br from-teal-400 to-teal-600 text-white p-5"
@@ -53,7 +53,7 @@ Chart.register(...registerables);
             <span class="text-3xl mr-3">🎴</span>
             <h3 class="text-lg font-semibold text-cyan-50">Flashcards</h3>
           </div>
-          <p class="text-4xl font-bold ">{{ totalFlashcards }}</p>
+          <p class="text-4xl font-bold">{{ totalFlashcards }}</p>
           <p class="mt-1 text-sm opacity-90">Learning items</p>
         </div>
 
@@ -77,7 +77,7 @@ Chart.register(...registerables);
           <div
             class="absolute inset-0 opacity-10 bg-[url('/assets/pattern.svg')]"
           ></div>
-          <div class="relative flex items-cent er mb-3">
+          <div class="relative flex items-center mb-3">
             <span class="text-3xl mr-3">🔄</span>
             <h3 class="text-lg font-semibold">Synonyms</h3>
           </div>
@@ -97,6 +97,20 @@ Chart.register(...registerables);
           </div>
           <p class="text-4xl font-bold">{{ totalFillBlanks }}</p>
           <p class="mt-1 text-sm opacity-90">Exercises</p>
+        </div>
+
+        <div
+          class="relative overflow-hidden rounded-xl shadow-lg transform hover:scale-105 transition-transform bg-gradient-to-br from-indigo-400 to-indigo-600 text-white p-5"
+        >
+          <div
+            class="absolute inset-0 opacity-10 bg-[url('/assets/pattern.svg')]"
+          ></div>
+          <div class="relative flex items-center mb-3">
+            <span class="text-3xl mr-3">🧩</span>
+            <h3 class="text-lg font-semibold">Word Hints</h3>
+          </div>
+          <p class="text-4xl font-bold">{{ totalWordHints }}</p>
+          <p class="mt-1 text-sm opacity-90">Reorder tasks</p>
         </div>
       </div>
 
@@ -138,6 +152,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   totalConjugations = 0;
   totalSynonyms = 0;
   totalFillBlanks = 0;
+  totalWordHints = 0;
   newUsers = 0;
   private subscriptions: Subscription[] = [];
 
@@ -158,6 +173,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
       conjugations: this.adminService.getConjugations(),
       synonyms: this.adminService.getSynonyms(),
       fillBlanks: this.adminService.getFillBlanks(),
+      wordHints: this.adminService.getWordHints(),
     });
 
     this.subscriptions.push(
@@ -168,6 +184,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
           this.totalConjugations = data.conjugations.length;
           this.totalSynonyms = data.synonyms.length;
           this.totalFillBlanks = data.fillBlanks.length;
+          this.totalWordHints = data.wordHints.length;
 
           const weekAgo = new Date();
           weekAgo.setDate(weekAgo.getDate() - 7);
@@ -183,7 +200,6 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   }
 
   private initializeCharts(data: any) {
-    // User Level Distribution
     const levels = ["BEGINNER", "INTERMEDIATE", "ADVANCED"] as const;
     const userCounts = levels.map(
       (l) => data.users.filter((u: any) => u.level === l).length
@@ -205,7 +221,6 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
       },
     });
 
-    // Content Distribution by Level
     const bracket = {
       easy: {
         flash: data.flashcards.filter((f: any) => f.level === "easy").length,
@@ -213,6 +228,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
           .length,
         syn: data.synonyms.filter((s: any) => s.level === "easy").length,
         fill: data.fillBlanks.filter((f: any) => f.level === "Easy").length,
+        word: data.wordHints.filter((w: any) => w.level === "Easy").length,
       },
       medium: {
         flash: data.flashcards.filter((f: any) => f.level === "medium").length,
@@ -220,6 +236,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
           .length,
         syn: data.synonyms.filter((s: any) => s.level === "medium").length,
         fill: data.fillBlanks.filter((f: any) => f.level === "Medium").length,
+        word: data.wordHints.filter((w: any) => w.level === "Medium").length,
       },
       hard: {
         flash: data.flashcards.filter((f: any) => f.level === "hard").length,
@@ -227,6 +244,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
           .length,
         syn: data.synonyms.filter((s: any) => s.level === "hard").length,
         fill: data.fillBlanks.filter((f: any) => f.level === "Hard").length,
+        word: data.wordHints.filter((w: any) => w.level === "Hard").length,
       },
     };
 
@@ -258,6 +276,11 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
             label: "Fill Blanks",
             data: [bracket.easy.fill, bracket.medium.fill, bracket.hard.fill],
             backgroundColor: "#F59E0B",
+          },
+          {
+            label: "Word Hints",
+            data: [bracket.easy.word, bracket.medium.word, bracket.hard.word],
+            backgroundColor: "#6366F1",
           },
         ],
       },

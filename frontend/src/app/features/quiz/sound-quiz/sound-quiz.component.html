@@ -1,0 +1,116 @@
+<div class="mx-auto max-w-2xl p-6 space-y-6">
+  <!-- Progress and Score -->
+  <div class="flex items-center justify-between" *ngIf="!finished">
+    <div class="text-lg font-semibold text-primary-600">
+      Question {{ index + 1 }} / {{ questions.length }}
+    </div>
+    <div class="text-lg font-semibold">
+      Score: <span class="text-primary-600">{{ quizScore }}</span>
+    </div>
+  </div>
+
+  <!-- Progress bar -->
+  <div *ngIf="!finished" class="h-2 bg-gray-200 rounded-full overflow-hidden">
+    <div
+      class="h-full bg-primary-600 transition-all duration-300"
+      [style.width.%]="(index / questions.length) * 100"
+    ></div>
+  </div>
+
+  <!-- Play Audio Button -->
+  <div *ngIf="!finished" class="flex items-center gap-4">
+    <button
+      (click)="playCurrentAudio()"
+      class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition"
+    >
+      ▶️ Replay Audio
+    </button>
+    <span class="text-gray-600">
+      Listen to the audio and type the sentence you hear.
+    </span>
+  </div>
+
+  <!-- Answer Input -->
+  <textarea
+    *ngIf="!finished"
+    [(ngModel)]="userInput"
+    [readonly]="feedback"
+    rows="3"
+    class="w-full p-4 rounded-lg border focus:outline-none focus:ring-2"
+    [ngClass]="{
+      'border-gray-300 focus:ring-primary-500': !feedback,
+      'border-green-500 bg-green-50': feedback === 'correct',
+      'border-red-500 bg-red-50': feedback === 'incorrect'
+    }"
+    placeholder="Type the German sentence you heard..."
+  ></textarea>
+
+  <!-- Submit / Feedback Button -->
+  <button
+    *ngIf="!finished"
+    (click)="check()"
+    [disabled]="!userInput.trim().length || feedback"
+    class="w-full py-3 rounded-lg text-white font-semibold transition"
+    [ngClass]="{
+      'bg-primary-600 hover:bg-primary-700': !feedback,
+      'bg-green-600': feedback === 'correct',
+      'bg-red-600': feedback === 'incorrect'
+    }"
+  >
+    {{
+      feedback
+        ? feedback === "correct"
+          ? "✅ Correct!"
+          : "❌ Incorrect"
+        : "Check Answer"
+    }}
+  </button>
+
+  <!-- Quiz End Screen -->
+  <div
+    *ngIf="finished"
+    class="text-center space-y-4 p-6 bg-white rounded-lg shadow"
+  >
+    <h2 class="text-2xl font-bold text-primary-600">Quiz Completed 🎉</h2>
+    <p class="text-lg">
+      You scored <span class="font-bold">{{ quizScore }}</span> out of
+      {{ questions.length * 10 }} points.
+    </p>
+
+    <button
+      class="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition"
+      (click)="restart()"
+    >
+      🔁 Play Again
+    </button>
+
+    <!-- Review Mode -->
+    <div class="mt-8 text-left space-y-6">
+      <h3 class="text-xl font-semibold text-primary-600">
+        Review your answers:
+      </h3>
+
+      <div
+        *ngFor="let q of questions; index as i"
+        class="border rounded-lg p-4 shadow bg-gray-50"
+      >
+        <div class="text-sm font-semibold text-gray-600 mb-2">
+          Question {{ i + 1 }}
+        </div>
+
+        <p>
+          <strong>Your Answer:</strong>
+          <span
+            [ngClass]="{
+              'text-green-600': q.isCorrect,
+              'text-red-600': !q.isCorrect
+            }"
+          >
+            {{ q.userAnswer || "No answer" }}
+          </span>
+        </p>
+        <p><strong>Correct Answer:</strong> {{ q.answer }}</p>
+      </div>
+    </div>
+  </div>
+</div>

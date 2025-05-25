@@ -124,6 +124,13 @@ export const APP_ROUTES: Routes = [
             (m) => m.FillBlankComponent
           ),
       },
+      {
+        path: "wordhint",
+        loadComponent: () =>
+          import("./features/admin/word-hint/admin-word-hint.component").then(
+            (m) => m.AdminWordHintComponent
+          ),
+      },
     ],
   },
   {

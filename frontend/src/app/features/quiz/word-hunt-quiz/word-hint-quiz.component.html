@@ -1,0 +1,147 @@
+<div class="p-6">
+  <div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="mb-6 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <h2 class="text-2xl font-bold text-primary-600">Sentence Scramble</h2>
+        <span
+          class="bg-primary-100 text-primary-800 text-sm font-medium px-3 py-1 rounded-full"
+        >
+          Level: {{ userLevel | titlecase }}
+        </span>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="text-lg font-semibold text-primary-600">
+          Score: {{ score }}
+        </div>
+        <div class="text-lg font-semibold text-gray-600">
+          Time: {{ format(timer) }}
+        </div>
+        <a
+          routerLink="/dashboard/quiz"
+          class="text-primary-600 hover:text-primary-700"
+        >
+          ← Back
+        </a>
+      </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div *ngIf="isLoading" class="flex justify-center items-center h-64">
+      <div
+        class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"
+      ></div>
+    </div>
+
+    <!-- Error -->
+    <div
+      *ngIf="error"
+      class="bg-red-50 border border-red-400 text-red-700 px-4 py-3 rounded mb-4"
+    >
+      {{ error }}
+      <button (click)="retry()" class="ml-2 underline hover:text-red-800">
+        retry
+      </button>
+    </div>
+
+    <!-- Empty -->
+    <p *ngIf="!isLoading && !error && !cards.length" class="text-center py-12">
+      No cards yet for this level.
+    </p>
+
+    <!-- Quiz Content -->
+    <ng-container *ngIf="!isLoading && !error && cards.length">
+      <div class="text-center mb-4">
+        {{ current + 1 }}/{{ cards.length }} cards
+      </div>
+
+      <!-- Question -->
+      <div class="container" *ngIf="!reviewMode">
+        <p class="text-lg mb-4 text-center">
+          {{ cards[current].questionText }}
+        </p>
+
+        <!-- Scrambled Words Box -->
+        <div
+          class="p-5 rounded border text-xl font-semibold text-center mb-6 flex flex-wrap justify-center gap-2"
+          [ngClass]="{
+            'bg-green-50 border-green-300 text-green-700': isCorrect,
+            'bg-red-50 border-red-300 text-red-700': isIncorrect,
+            'bg-gray-50 border-primary-200': !isCorrect && !isIncorrect
+          }"
+        >
+          <span
+            *ngFor="let word of cards[current].scrambledSentence.split(' ')"
+            class="px-3 py-1 bg-white border border-primary-200 rounded shadow"
+          >
+            {{ word }}
+          </span>
+        </div>
+
+        <input
+          #answerInput
+          [(ngModel)]="userAnswer"
+          (keyup.enter)="validate()"
+          class="input w-full mb-4"
+          placeholder="Type the correct sentence..."
+        />
+
+        <div class="flex justify-between">
+          <button class="btn" (click)="prev()" [disabled]="current === 0">
+            ←
+          </button>
+          <button
+            class="btn"
+            (click)="validate()"
+            [ngClass]="{
+              'bg-green-600 hover:bg-green-700 text-white': isCorrect,
+              'bg-red-600 hover:bg-red-700 text-white': isIncorrect
+            }"
+          >
+            Validate
+          </button>
+          <button
+            class="btn"
+            (click)="next()"
+            [disabled]="current === cards.length - 1"
+          >
+            →
+          </button>
+        </div>
+      </div>
+
+      <!-- Review Mode -->
+      <div *ngIf="reviewMode" class="review-container">
+        <h3 class="text-xl font-bold mb-4">Review Mode</h3>
+        <p class="mb-2">
+          Final Score:
+          <span class="font-semibold text-primary-600"
+            >{{ score }}/{{ cards.length * 10 }}</span
+          >
+        </p>
+        <p class="mb-6">Time: {{ format(timer) }}</p>
+
+        <div *ngFor="let r of reviewed; let i = index" class="review-card">
+          <div class="review-index">{{ i + 1 }}</div>
+          <div class="review-content">
+            <div>{{ r.card.sentence }}</div>
+            <div class="text-sm text-gray-500">
+              Translation: {{ r.card.translation }}
+            </div>
+            <div class="review-result">
+              <span
+                [class.text-green-600]="r.wasCorrect"
+                [class.text-red-600]="!r.wasCorrect"
+              >
+                {{ r.wasCorrect ? "✓" : "✗" }}
+              </span>
+              <span class="text-sm text-gray-500 ml-2"
+                >Your answer: {{ r.userInput }}</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

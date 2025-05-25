@@ -1,44 +1,88 @@
-import { Routes } from '@angular/router';
+import { Routes } from "@angular/router";
 
 export const QUIZ_ROUTES: Routes = [
   {
-    path: '',
-    loadComponent: () => import('./quiz-home/quiz-home.component').then(m => m.QuizHomeComponent)
+    path: "",
+    loadComponent: () =>
+      import("./quiz-home/quiz-home.component").then(
+        (m) => m.QuizHomeComponent
+      ),
   },
   {
-    path: 'challenge',
-    loadComponent: () => import('./challenge-quiz/challenge-quiz.component').then(m => m.ChallengeQuizComponent)
+    path: "challenge",
+    loadComponent: () =>
+      import("./challenge-quiz/challenge-quiz.component").then(
+        (m) => m.ChallengeQuizComponent
+      ),
   },
   {
-    path: 'conjugation',
-    loadComponent: () => import('./conjugation-quiz/conjugation-quiz.component').then(m => m.ConjugationQuizComponent)
+    path: "conjugation",
+    loadComponent: () =>
+      import("./conjugation-quiz/conjugation-quiz.component").then(
+        (m) => m.ConjugationQuizComponent
+      ),
   },
   {
-    path: 'custom',
-    loadComponent: () => import('./custom-quiz/custom-quiz.component').then(m => m.CustomQuizComponent)
+    path: "custom",
+    loadComponent: () =>
+      import("./custom-quiz/custom-quiz.component").then(
+        (m) => m.CustomQuizComponent
+      ),
   },
   {
-    path: 'dictation',
-    loadComponent: () => import('./dictation-quiz/dictation-quiz.component').then(m => m.DictationQuizComponent)
+    path: "dictation",
+    loadComponent: () =>
+      import("./dictation-quiz/dictation-quiz.component").then(
+        (m) => m.DictationQuizComponent
+      ),
   },
   {
-    path: 'flashcard',
-    loadComponent: () => import('./flashcard-quiz/flashcard-quiz.component').then(m => m.FlashcardQuizComponent)
+    path: "flashcard",
+    loadComponent: () =>
+      import("./flashcard-quiz/flashcard-quiz.component").then(
+        (m) => m.FlashcardQuizComponent
+      ),
   },
   {
-    path: 'sentence',
-    loadComponent: () => import('./sentence-quiz/sentence-quiz.component').then(m => m.SentenceQuizComponent)
+    path: "sentence",
+    loadComponent: () =>
+      import("./sentence-quiz/sentence-quiz.component").then(
+        (m) => m.SentenceQuizComponent
+      ),
   },
   {
-    path: 'synonym',
-    loadComponent: () => import('./synonym-quiz/synonym-quiz.component').then(m => m.SynonymQuizComponent)
+    path: "synonym",
+    loadComponent: () =>
+      import("./synonym-quiz/synonym-quiz.component").then(
+        (m) => m.SynonymQuizComponent
+      ),
   },
   {
-    path: 'word-hunt',
-    loadComponent: () => import('./word-hunt-quiz/word-hunt-quiz.component').then(m => m.WordHuntQuizComponent)
+    path: "wordhint",
+    loadComponent: () =>
+      import("./word-hunt-quiz/word-hunt-quiz.component").then(
+        (m) => m.WordHintQuizComponent
+      ),
   },
   {
-    path: 'fill-blank',
-    loadComponent: () => import('./fill-blank-quiz/fill-blank-quiz.component').then(m => m.FillBlankQuizComponent)
-  }
+    path: "fill-blank",
+    loadComponent: () =>
+      import("./fill-blank-quiz/fill-blank-quiz.component").then(
+        (m) => m.FillBlankQuizComponent
+      ),
+  },
+  {
+    path: "soundquiz",
+    loadComponent: () =>
+      import("./sound-quiz/sound-quiz.component").then(
+        (m) => m.SoundQuizComponent
+      ),
+  },
+  {
+    path: "imagequiz",
+    loadComponent: () =>
+      import("./image-quiz/image-quiz.component").then(
+        (m) => m.ImageQuizComponent
+      ),
+  },
 ];
