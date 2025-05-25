@@ -1,11 +1,10 @@
-<!-- ╔══ HEADER + STATS (inchangés) ══╗ -->
-<!-- ... le même code de cartes statiques que précédemment ... -->
-
 <!-- ░░ CHARTS ░░ -->
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
   <!-- User Level Pie -->
-  <div class="relative bg-white rounded-xl shadow-lg p-5 sm:p-6 lg:p-8">
-    <!-- Loader spécifique -->
+  <div
+    class="relative bg-white rounded-xl shadow-lg p-5 sm:p-6 lg:p-8 overflow-hidden break-words"
+  >
+    <!-- Loader -->
     <div
       *ngIf="loadingUserChart"
       class="absolute inset-0 flex items-center justify-center bg-white/70 rounded-xl z-10"
@@ -32,14 +31,17 @@
       </svg>
     </div>
 
-    <h3 class="text-xl font-semibold text-gray-700 mb-4">
+    <h3 class="text-lg sm:text-xl font-semibold text-gray-700 mb-4 truncate">
       User Level Distribution
     </h3>
     <canvas id="userLevelChart" class="max-h-64 w-full"></canvas>
   </div>
 
   <!-- Content Distribution Bar -->
-  <div class="relative bg-white rounded-xl shadow-lg p-5 sm:p-6 lg:p-8">
+  <div
+    class="relative bg-white rounded-xl shadow-lg p-5 sm:p-6 lg:p-8 overflow-hidden break-words"
+  >
+    <!-- Loader -->
     <div
       *ngIf="loadingContentChart"
       class="absolute inset-0 flex items-center justify-center bg-white/70 rounded-xl z-10"
@@ -66,7 +68,7 @@
       </svg>
     </div>
 
-    <h3 class="text-xl font-semibold text-gray-700 mb-4">
+    <h3 class="text-lg sm:text-xl font-semibold text-gray-700 mb-4 truncate">
       Content Distribution by Level
     </h3>
     <canvas id="contentDistributionChart" class="max-h-64 w-full"></canvas>

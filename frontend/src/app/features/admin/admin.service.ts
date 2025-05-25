@@ -3,6 +3,8 @@ import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { environment } from "../../../environments/environment";
 
+// ===== DTOs =====
+
 export interface AdminUserDTO {
   id: string;
   name: string;
@@ -61,13 +63,24 @@ export interface AdminFillBlankDTO {
   score: number;
 }
 
+export interface AdminWordHintDTO {
+  id: string;
+  sentence: string;
+  translation: string;
+  scrambledSentence: string;
+  questionText: string;
+  correctAnswer: string;
+  wrongAnswers: string[];
+  difficulty: string;
+  scoreValue: number;
+}
+
+// ===== Service =====
+
 @Injectable({
   providedIn: "root",
 })
 export class AdminService {
-  deleteUser(id: string) {
-    throw new Error("Method not implemented.");
-  }
   private readonly apiUrl = `${environment.apiUrl}/admin`;
 
   constructor(private http: HttpClient) {}
@@ -95,5 +108,14 @@ export class AdminService {
   // Fill in the Blanks
   getFillBlanks(): Observable<AdminFillBlankDTO[]> {
     return this.http.get<AdminFillBlankDTO[]>(`${this.apiUrl}/fillblank`);
+  }
+
+  // Word Hints (Word Rearrangement)
+  getWordHints(): Observable<AdminWordHintDTO[]> {
+    return this.http.get<AdminWordHintDTO[]>(`${this.apiUrl}/wordhint`);
+  }
+
+  deleteUser(id: string) {
+    throw new Error("Method not implemented.");
   }
 }

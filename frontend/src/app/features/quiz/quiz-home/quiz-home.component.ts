@@ -67,5 +67,23 @@ export class QuizHomeComponent {
       icon: "📝",
       route: "/dashboard/quiz/conjugation",
     },
+    {
+      name: "Word Hint",
+      description: "Reorder the words to form correct German sentences",
+      icon: "🧩",
+      route: "/dashboard/quiz/word-hint",
+    },
+    {
+      name: "Dictation Quiz",
+      description: "Listen to sentences and type what you hear",
+      icon: "🗣️",
+      route: "/dashboard/quiz/soundquiz",
+    },
+    {
+      name: "Image Quiz",
+      description: "Identify the correct German word from the image",
+      icon: "🖼️",
+      route: "/dashboard/quiz/imagequiz",
+    },
   ];
 }

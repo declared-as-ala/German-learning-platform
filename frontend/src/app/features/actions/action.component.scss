@@ -1,0 +1,15 @@
+.container {
+  @apply max-w-5xl mx-auto;
+
+  .card {
+    @apply flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow hover:shadow-lg transition cursor-pointer text-center;
+
+    h2 {
+      @apply text-lg font-semibold mt-4 text-gray-800;
+    }
+
+    .icon-circle {
+      @apply w-16 h-16 rounded-full flex items-center justify-center bg-primary-100 text-primary-600 mb-2;
+    }
+  }
+}
